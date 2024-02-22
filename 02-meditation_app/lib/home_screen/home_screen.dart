@@ -4,7 +4,7 @@ import 'package:meditation_app/home_screen/widgets/hero_image.dart';
 import 'package:meditation_app/home_screen/widgets/music_item.dart';
 import 'package:meditation_app/models/music.dart';
 
-import 'constants.dart';
+import '../constants.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});

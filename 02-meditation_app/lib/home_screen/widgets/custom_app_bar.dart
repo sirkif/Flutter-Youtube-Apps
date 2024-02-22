@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:meditation_app/home_screen/constants.dart';
+import 'package:meditation_app/constants.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({super.key});

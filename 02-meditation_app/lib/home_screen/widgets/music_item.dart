@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meditation_app/home_screen/constants.dart';
+import 'package:meditation_app/constants.dart';
 import 'package:meditation_app/home_screen/widgets/custom_text_button.dart';
 import 'package:meditation_app/models/music.dart';
 
