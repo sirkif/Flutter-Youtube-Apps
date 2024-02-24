@@ -2,9 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/models/todo.dart';
 
 class TodoItem extends StatelessWidget {
-  const TodoItem({super.key, required this.todo});
+  const TodoItem({
+    super.key,
+    required this.todoItem,
+    required this.markTodoAsCompleted,
+    required this.markTodoAsActive,
+  });
 
-  final Todo todo;
+  final Todo todoItem;
+  final Function(String) markTodoAsCompleted;
+  final Function(String) markTodoAsActive;
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -17,17 +25,25 @@ class TodoItem extends StatelessWidget {
       child: ListTile(
         // tileColor: Colors.white,
         leading: IconButton.filledTonal(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.task_alt,
+          onPressed: () {
+            if (todoItem.completed) {
+              markTodoAsActive(todoItem.id);
+            } else {
+              markTodoAsCompleted(todoItem.id);
+            }
+          },
+          icon: Icon(
+            todoItem.completed ? Icons.task_alt : Icons.circle_outlined,
           ),
         ),
         title: Text(
-          todo.title,
+          todoItem.title,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            decoration: TextDecoration.lineThrough,
+          style: TextStyle(
+            decoration: todoItem.completed
+                ? TextDecoration.lineThrough
+                : TextDecoration.none,
           ),
         ),
         // trailing: const Icon(

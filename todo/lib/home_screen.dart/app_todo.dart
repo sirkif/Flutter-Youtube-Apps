@@ -1,66 +1,73 @@
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
-import '../models/todo.dart';
 import '../widgets/app_textfield.dart';
 
-class AppTodo extends StatelessWidget {
+class AppTodo extends StatefulWidget {
   const AppTodo({
     super.key,
-    required this.todoList,
-    required this.addNewTodoItem,
     required this.textController,
+    required this.addNewTodoItem,
   });
 
-  final List<Todo> todoList;
   final TextEditingController textController;
   final Function(String) addNewTodoItem;
 
   @override
+  State<AppTodo> createState() => _AppTodoState();
+}
+
+class _AppTodoState extends State<AppTodo> {
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Container(
-        height: 200,
-        padding: const EdgeInsets.symmetric(
-          vertical: kPadding32,
-          horizontal: kPadding16,
-        ),
-        decoration: const BoxDecoration(
-          gradient: kDarkLinearGradient,
-        ),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "TODO",
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 8,
-                  ),
+    return Container(
+      height: 200,
+      padding: const EdgeInsets.symmetric(
+        vertical: kPadding32,
+        horizontal: kPadding16,
+      ),
+      decoration: const BoxDecoration(
+        gradient: kDarkLinearGradient,
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "TODO",
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 8,
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.sunny),
-                )
-              ],
-            ),
-            const SizedBox(
-              height: kPadding24,
-            ),
-            // App TextField
-            AppTextField(
-              todoList: todoList,
-              textController: textController,
-              addNewTodoItem: addNewTodoItem,
-            ),
-          ],
-        ),
+              ),
+              IconButton(
+                onPressed: () {
+                  // setState(() {
+                  // themeMode = themeMode == ThemeMode.light
+                  //       ? ThemeMode.dark
+                  //       : ThemeMode.light;
+                  // });
+                },
+                icon: const Icon(
+                  Icons.dark_mode,
+                  // themeMode == ThemeMode.light
+                  //     ? Icons.wb_sunny_outlined
+                  //     : Icons.dark_mode,
+                ),
+              )
+            ],
+          ),
+          const SizedBox(
+            height: kPadding24,
+          ),
+          // App TextField
+          AppTextField(
+            textController: widget.textController,
+            addNewTodoItem: widget.addNewTodoItem,
+          ),
+        ],
       ),
     );
   }

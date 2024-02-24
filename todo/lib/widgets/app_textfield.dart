@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/constants.dart';
 
-import '../models/todo.dart';
-
 class AppTextField extends StatefulWidget {
   const AppTextField({
     super.key,
-    required this.todoList,
     required this.addNewTodoItem,
     required this.textController,
   });
 
-  final List<Todo> todoList;
   final TextEditingController textController;
   final Function(String) addNewTodoItem;
 

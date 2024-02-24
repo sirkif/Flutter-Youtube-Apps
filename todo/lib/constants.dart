@@ -17,6 +17,7 @@ const Color kColorBlue = Color(0xFF397CFC);
 
 // Dark Mode
 const Color kDarkTextColor = Color(0xFFC8CBE7);
+// const Color kDarkPrimaryColor = Color(0xFF171823);
 const Color kDarkPrimaryColor = Color(0xFF171823);
 
 const LinearGradient kDarkLinearGradient = LinearGradient(
