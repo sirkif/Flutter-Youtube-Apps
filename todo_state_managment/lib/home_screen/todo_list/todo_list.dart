@@ -8,12 +8,10 @@ class TodoList extends StatefulWidget {
   const TodoList({
     super.key,
     required this.todoList,
-    required this.markTodoAsCompleted,
     required this.markTodoAsActive,
   });
 
   final List<Todo> todoList;
-  final Function(String) markTodoAsCompleted;
   final Function(String) markTodoAsActive;
 
   @override
@@ -21,23 +19,23 @@ class TodoList extends StatefulWidget {
 }
 
 class _TodoListState extends State<TodoList> {
-  void removeTodo(Todo todoItem) {
-    // print('Removing todo with ID: ${todoItem.id}');
-    setState(() {
-      widget.todoList.remove(todoItem);
-    });
+  // void removeTodo(Todo todoItem) {
+  //   // print('Removing todo with ID: ${todoItem.id}');
+  //   setState(() {
+  //     widget.todoList.remove(todoItem);
+  //   });
 
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      backgroundColor: kDarkPrimaryColor,
-      content: Text(
-        '${todoItem.title} dismissed',
-        style: TextStyle(
-          color: Colors.purple[100],
-        ),
-      ),
-    ));
-  }
+  //   ScaffoldMessenger.of(context).clearSnackBars();
+  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //     backgroundColor: kDarkPrimaryColor,
+  //     content: Text(
+  //       '${todoItem.title} dismissed',
+  //       style: TextStyle(
+  //         color: Colors.purple[100],
+  //       ),
+  //     ),
+  //   ));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +65,7 @@ class _TodoListState extends State<TodoList> {
             //   ),
             // ),
           ),
-          onDismissed: (direction) => removeTodo(todoItem),
+          // onDismissed: (direction) => removeTodo(todoItem),
           confirmDismiss: (DismissDirection direction) async {
             final confirmed = await showDialog<bool>(
               context: context,
@@ -92,7 +90,6 @@ class _TodoListState extends State<TodoList> {
           },
           child: TodoItem(
             todoItem: todoItem,
-            markTodoAsCompleted: widget.markTodoAsCompleted,
             markTodoAsActive: widget.markTodoAsActive,
           ),
         );

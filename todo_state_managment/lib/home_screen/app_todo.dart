@@ -3,21 +3,10 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 import '../widgets/app_textfield.dart';
 
-class AppTodo extends StatefulWidget {
+class AppTodo extends StatelessWidget {
   const AppTodo({
     super.key,
-    required this.textController,
-    required this.addNewTodoItem,
   });
-
-  final TextEditingController textController;
-  final Function(String) addNewTodoItem;
-
-  @override
-  State<AppTodo> createState() => _AppTodoState();
-}
-
-class _AppTodoState extends State<AppTodo> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -63,10 +52,7 @@ class _AppTodoState extends State<AppTodo> {
             height: kPadding24,
           ),
           // App TextField
-          AppTextField(
-            textController: widget.textController,
-            addNewTodoItem: widget.addNewTodoItem,
-          ),
+          AppTextField(),
         ],
       ),
     );

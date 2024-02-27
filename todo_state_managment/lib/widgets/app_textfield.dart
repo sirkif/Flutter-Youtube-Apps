@@ -1,35 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/constants.dart';
+import 'package:todo_app/cubit/todo_cubit.dart';
+
+import '../utils/service_locator.dart';
 
 class AppTextField extends StatefulWidget {
   const AppTextField({
     super.key,
-    required this.addNewTodoItem,
-    required this.textController,
   });
-
-  final TextEditingController textController;
-  final Function(String) addNewTodoItem;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
 }
 
 class _AppTextFieldState extends State<AppTextField> {
+  final textController = TextControllerSingleton.textEditingController;
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    textController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final todoCubit = context.read<TodoCubit>();
     return TextField(
       // autofocus: true,
       // obscureText: true,
       // keyboardType: TextInputType.number,
       // style: const TextStyle(color: Colors.orange),
-      controller: widget.textController,
-      onSubmitted: (value) => widget.addNewTodoItem(value),
-      onChanged: (value) {
-        setState(() {
-          widget.textController.text = value;
-        });
+      controller: textController,
+      onSubmitted: (value) {
+        todoCubit.addNewTodoItem(value);
+        textController.text = "";
+        FocusScope.of(context).unfocus();
       },
+
+      // onChanged: (value) {
+      //   setState(() {
+      //     textController.text = value;
+      //   });
+      // },
       cursorWidth: 4,
       cursorColor: Colors.cyan,
       textCapitalization: TextCapitalization.sentences,
@@ -42,11 +56,11 @@ class _AppTextFieldState extends State<AppTextField> {
           color: Colors.white.withOpacity(0.7),
         ),
         // prefixIcon: const Icon(Icons.search),
-        suffixIcon: widget.textController.text.isEmpty
+        suffixIcon: textController.text.isEmpty
             ? const SizedBox()
             : IconButton(
                 onPressed: () {
-                  widget.textController.clear();
+                  textController.clear();
                 },
                 icon: const Icon(
                   Icons.clear,

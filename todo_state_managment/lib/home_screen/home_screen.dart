@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/constants.dart';
+import 'package:todo_app/cubit/todo_cubit.dart';
 import 'package:todo_app/home_screen/app_todo.dart';
 
 import '../models/todo.dart';
+import '../utils/service_locator.dart';
 import '../widgets/app_empty_view.dart';
 import '../widgets/app_floating_button.dart';
 import 'todo_list/todo_list.dart';
@@ -18,21 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Todo> activeList = [];
   List<Todo> completedList = [];
 
-  TextEditingController textController = TextEditingController();
-
-  void addNewTodoItem(String value) {
-    if (textController.text.isNotEmpty) {
-      setState(() {
-        textController.text = value;
-        final activeTodo = Todo(
-          title: textController.text.trim(),
-        );
-        activeList.add(activeTodo);
-        textController.text = '';
-      });
-      FocusScope.of(context).unfocus();
-    }
-  }
+  final textController = TextControllerSingleton.textEditingController;
 
   void markTodoAsCompleted(String id) {
     setState(() {
@@ -71,79 +60,87 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    textController.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Scaffold(
-          body: Column(
-            children: [
-              // App Todo
-              AppTodo(
-                textController: textController,
-                addNewTodoItem: addNewTodoItem,
-              ),
+    final focusScope = FocusScope.of(context);
+    final List<Todo> todoList = context.watch<TodoCubit>().state;
+    final List<Todo> completedList = context.watch<TodoCubit>().state;
+    final TodoCubit contextRead = context.read<TodoCubit>();
 
-              // Tab Bar
-              const SizedBox(
-                  child: ColoredBox(
-                color: kColorBlack87,
-                child: TabBar(
-                  // labelColor: Colors.greenAccent,
-                  // indicatorColor: Colors.yellow,
-                  // indicatorSize: TabBarIndicatorSize.tab,
-                  // indicator: BoxDecoration(
-                  //   color: Colors.white,
-                  // ),
-                  tabs: [
-                    Tab(
-                      text: "Active",
-                    ),
-                    Tab(
-                      text: "Completed",
-                    ),
-                  ],
-                ),
-              )),
+    return SafeArea(
+      child: DefaultTabController(
+        length: 2,
+        child: GestureDetector(
+          onTap: () {
+            focusScope.unfocus();
+          },
+          child: Scaffold(
+            body: Column(
+              children: [
+                // App Todo
+                const AppTodo(),
 
-              Expanded(
-                child: Container(
+                // Tab Bar
+                const SizedBox(
+                    child: ColoredBox(
                   color: kColorBlack87,
-                  child: TabBarView(
-                    children: [
-                      activeList.isEmpty
-                          ? const AppEmptyView()
-                          : TodoList(
-                              todoList: activeList,
-                              markTodoAsCompleted: markTodoAsCompleted,
-                              markTodoAsActive: markTodoAsActive,
-                            ),
-                      completedList.isEmpty
-                          ? const AppEmptyView()
-                          : TodoList(
-                              todoList: completedList,
-                              markTodoAsCompleted: markTodoAsCompleted,
-                              markTodoAsActive: markTodoAsActive,
-                            ),
+                  child: TabBar(
+                    // labelColor: Colors.greenAccent,
+                    // indicatorColor: Colors.yellow,
+                    // indicatorSize: TabBarIndicatorSize.tab,
+                    // indicator: BoxDecoration(
+                    //   color: Colors.white,
+                    // ),
+                    tabs: [
+                      Tab(
+                        text: "Active",
+                      ),
+                      Tab(
+                        text: "Completed",
+                      ),
                     ],
                   ),
+                )),
+
+                Expanded(
+                  child: Container(
+                    color: kColorBlack87,
+                    child: TabBarView(
+                      children: [
+                        todoList.isEmpty
+                            ? const AppEmptyView()
+                            : TodoList(
+                                todoList: todoList,
+                                markTodoAsActive: markTodoAsActive,
+                              ),
+                        // BlocBuilder<TodoCubit, List<Todo>>(
+                        //   builder: (context, state) {
+                        //     if (state.isEmpty) {
+                        //       const AppEmptyView();
+                        //     }
+                        //     return TodoList(
+                        //       markTodoAsActive: markTodoAsActive,
+                        //     );
+                        //   },
+                        // ),
+                        todoList.isEmpty
+                            ? const AppEmptyView()
+                            : TodoList(
+                                todoList: ,
+                                markTodoAsActive: markTodoAsActive,
+                              ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          floatingActionButton: AppFloatingButton(
-            addNewTodoItem: () {
-              addNewTodoItem(textController.text);
-            },
+              ],
+            ),
+            floatingActionButton: AppFloatingButton(
+              addNewTodoItem: () {
+                contextRead.addNewTodoItem(textController.text);
+                textController.clear();
+                focusScope.unfocus();
+              },
+            ),
           ),
         ),
       ),

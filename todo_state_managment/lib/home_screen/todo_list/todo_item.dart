@@ -5,12 +5,12 @@ class TodoItem extends StatelessWidget {
   const TodoItem({
     super.key,
     required this.todoItem,
-    required this.markTodoAsCompleted,
+    // required this.markTodoAsCompleted,
     required this.markTodoAsActive,
   });
 
   final Todo todoItem;
-  final Function(String) markTodoAsCompleted;
+  // final Function(String) markTodoAsCompleted;
   final Function(String) markTodoAsActive;
 
   @override
@@ -29,7 +29,7 @@ class TodoItem extends StatelessWidget {
             if (todoItem.completed) {
               markTodoAsActive(todoItem.id);
             } else {
-              markTodoAsCompleted(todoItem.id);
+              // markTodoAsCompleted(todoItem.id);
             }
           },
           icon: Icon(
