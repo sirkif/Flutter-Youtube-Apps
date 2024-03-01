@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/constants.dart';
 import 'package:todo_app/home_screen/todo_list/todo_item.dart';
 
-import '../../models/todo.dart';
+import '../../models/todo_model.dart';
 
 class TodoList extends StatefulWidget {
   const TodoList({
@@ -12,7 +12,7 @@ class TodoList extends StatefulWidget {
     required this.markTodoAsActive,
   });
 
-  final List<Todo> todoList;
+  final List<TodoModel> todoList;
   final Function(String) markTodoAsCompleted;
   final Function(String) markTodoAsActive;
 
@@ -21,7 +21,7 @@ class TodoList extends StatefulWidget {
 }
 
 class _TodoListState extends State<TodoList> {
-  void removeTodo(Todo todoItem) {
+  void removeTodo(TodoModel todoItem) {
     // print('Removing todo with ID: ${todoItem.id}');
     setState(() {
       widget.todoList.remove(todoItem);

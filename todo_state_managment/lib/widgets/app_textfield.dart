@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/constants.dart';
-import 'package:todo_app/cubit/todo_cubit.dart';
 
 import '../utils/service_locator.dart';
 
@@ -15,7 +13,8 @@ class AppTextField extends StatefulWidget {
 }
 
 class _AppTextFieldState extends State<AppTextField> {
-  final textController = TextControllerSingleton.textEditingController;
+  final textController = TextControllerInstance.textEditingController;
+  final todoViewModel = TodoViewModelInstance.todoViewModel;
 
   @override
   void dispose() {
@@ -26,7 +25,7 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   Widget build(BuildContext context) {
-    final todoCubit = context.read<TodoCubit>();
+    final themeContext = Theme.of(context);
     return TextField(
       // autofocus: true,
       // obscureText: true,
@@ -34,7 +33,7 @@ class _AppTextFieldState extends State<AppTextField> {
       // style: const TextStyle(color: Colors.orange),
       controller: textController,
       onSubmitted: (value) {
-        todoCubit.addNewTodoItem(value);
+        todoViewModel.addNewTodoItem(value);
         textController.text = "";
         FocusScope.of(context).unfocus();
       },
@@ -49,11 +48,13 @@ class _AppTextFieldState extends State<AppTextField> {
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(
         filled: true,
-        fillColor: const Color(0xFF25273D),
+        fillColor: themeContext.brightness == Brightness.dark
+            ? const Color(0xFF25273D)
+            : Colors.white,
         hintText: 'Create a new todo..',
         hintStyle: TextStyle(
           fontSize: 16,
-          color: Colors.white.withOpacity(0.7),
+          color: themeContext.colorScheme.onSurfaceVariant,
         ),
         // prefixIcon: const Icon(Icons.search),
         suffixIcon: textController.text.isEmpty

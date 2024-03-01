@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/models/todo.dart';
+import 'package:todo_app/models/todo_model.dart';
 
 class TodoItem extends StatelessWidget {
   const TodoItem({
@@ -9,7 +9,7 @@ class TodoItem extends StatelessWidget {
     required this.markTodoAsActive,
   });
 
-  final Todo todoItem;
+  final TodoModel todoItem;
   final Function(String) markTodoAsCompleted;
   final Function(String) markTodoAsActive;
 

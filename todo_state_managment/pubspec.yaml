@@ -31,8 +31,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.1.4
-  get_it: ^7.6.7
+  june: ^0.8.5
   uuid: ^4.3.3
 
 dev_dependencies:

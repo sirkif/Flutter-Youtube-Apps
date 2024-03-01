@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 
+import '../utils/service_locator.dart';
+
 class AppFloatingButton extends StatelessWidget {
-  const AppFloatingButton({
+  AppFloatingButton({
     super.key,
-    required this.addNewTodoItem,
   });
 
-  final Function() addNewTodoItem;
+  final todoViewModel = TodoViewModelInstance.todoViewModel;
+
+  final textController = TextControllerInstance.textEditingController;
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
       backgroundColor: Colors.black87,
-      onPressed: addNewTodoItem,
+      onPressed: () {
+        todoViewModel.addNewTodoItem(textController.text.trim());
+        textController.clear();
+        FocusScope.of(context).unfocus();
+      },
       child: Icon(
         Icons.add_task,
         color: Colors.purple[100],
