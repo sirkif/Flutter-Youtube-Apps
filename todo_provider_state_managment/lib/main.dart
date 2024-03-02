@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData(
         colorScheme: darkColorScheme,
       ),
-      themeMode: context.read<ThemeProvider>().themeMode,
+      themeMode: context.watch<ThemeProvider>().themeMode,
       home: const HomeView(),
     );
   }
