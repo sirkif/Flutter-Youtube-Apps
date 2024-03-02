@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:todo_app/constants.dart';
-import 'package:todo_app/home_view/todo_cubit/todo_cubit.dart';
+import 'package:todo_app/home_view/todo_provider/todo_provider.dart';
 
 import '../utils/service_locator.dart';
 
@@ -15,12 +15,12 @@ class AppTextField extends StatefulWidget {
 }
 
 class _AppTextFieldState extends State<AppTextField> {
-  TextEditingController textController = TextControllerInstance.textController;
+  final textControllerSingleton = TextControllerSingleton.textController;
 
   @override
   void dispose() {
     super.dispose();
-    textController.dispose();
+    textControllerSingleton.dispose();
   }
 
   @override
@@ -30,10 +30,10 @@ class _AppTextFieldState extends State<AppTextField> {
       // obscureText: true,
       // keyboardType: TextInputType.number,
       // style: const TextStyle(color: Colors.orange),
-      controller: textController,
+      controller: textControllerSingleton,
       onSubmitted: (value) {
-        context.read<TodoCubit>().addNewTodoItem(value);
-        textController.clear();
+        context.read<TodoProvider>().addNewTodoItem(value.trim());
+        textControllerSingleton.clear();
         FocusScope.of(context).unfocus();
       },
       cursorWidth: 4,
@@ -49,11 +49,11 @@ class _AppTextFieldState extends State<AppTextField> {
           color: Theme.of(context).colorScheme.onSurfaceVariant,
         ),
         // prefixIcon: const Icon(Icons.search),
-        suffixIcon: textController.text.isEmpty
+        suffixIcon: textControllerSingleton.text.isEmpty
             ? const SizedBox()
             : IconButton(
                 onPressed: () {
-                  textController.clear();
+                  textControllerSingleton.clear();
                 },
                 icon: Icon(
                   Icons.clear,

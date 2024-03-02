@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/constants.dart';
 
-class AppTextField extends StatefulWidget {
+class AppTextField extends StatelessWidget {
   const AppTextField({
     super.key,
     required this.addNewTodoItem,
@@ -11,11 +11,9 @@ class AppTextField extends StatefulWidget {
   final TextEditingController textController;
   final Function(String) addNewTodoItem;
 
-  @override
-  State<AppTextField> createState() => _AppTextFieldState();
-}
+  //  This solution won't work because they need a shared instance of TextEditingController
+  // final TextEditingController textController = TextEditingController();
 
-class _AppTextFieldState extends State<AppTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -23,13 +21,13 @@ class _AppTextFieldState extends State<AppTextField> {
       // obscureText: true,
       // keyboardType: TextInputType.number,
       // style: const TextStyle(color: Colors.orange),
-      controller: widget.textController,
-      onSubmitted: (value) => widget.addNewTodoItem(value),
-      onChanged: (value) {
-        setState(() {
-          widget.textController.text = value;
-        });
-      },
+      controller: textController,
+      onSubmitted: (value) => addNewTodoItem(value),
+      // onChanged: (value) {
+      //   setState(() {
+      //     textController.text = value;
+      //   });
+      // },
       cursorWidth: 4,
       cursorColor: Colors.cyan,
       textCapitalization: TextCapitalization.sentences,
@@ -42,11 +40,11 @@ class _AppTextFieldState extends State<AppTextField> {
           color: Colors.white.withOpacity(0.7),
         ),
         // prefixIcon: const Icon(Icons.search),
-        suffixIcon: widget.textController.text.isEmpty
+        suffixIcon: textController.text.isEmpty
             ? const SizedBox()
             : IconButton(
                 onPressed: () {
-                  widget.textController.clear();
+                  textController.clear();
                 },
                 icon: const Icon(
                   Icons.clear,

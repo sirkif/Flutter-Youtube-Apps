@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
 
-class TextControllerInstance {
+class TextControllerSingleton {
   static final TextEditingController textController = TextEditingController();
 }

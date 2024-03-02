@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'home_screen/home_screen.dart';
+import 'home_view/home_view.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       title: 'Todo App',
       theme: ThemeData.dark(),
       themeMode: ThemeMode.system,
-      home: const HomeScreen(),
+      home: const HomeView(),
     );
   }
 }

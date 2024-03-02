@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:june/june.dart';
-import 'package:todo_app/utils/app_theme_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_app/home_view/todo_cubit/todo_cubit.dart';
 
 import 'color_schemes.dart';
-import 'home/home_screen.dart';
+import 'home_view/home_view.dart';
+import 'utils/theme_cubit.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -18,22 +19,28 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return JuneBuilder(
-      () => AppThemeState(),
-      builder: (controller) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Todo App',
-        theme: ThemeData(
-          colorScheme: lightColorScheme,
-          // brightness: Brightness.light,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ThemeCubit(),
         ),
-        darkTheme: ThemeData(
-          colorScheme: darkColorScheme,
-          // brightness: Brightness.dark,
+        BlocProvider(
+          create: (context) => TodoCubit(),
         ),
-        themeMode: June.getState(AppThemeState()).themeMode,
-        home: const HomeScreen(),
-      ),
+      ],
+      child: BlocBuilder<ThemeCubit, ThemeMode>(
+          builder: (context, themeMode) => MaterialApp(
+                debugShowCheckedModeBanner: false,
+                title: 'Todo App',
+                theme: ThemeData(
+                  colorScheme: lightColorScheme,
+                ),
+                darkTheme: ThemeData(
+                  colorScheme: darkColorScheme,
+                ),
+                themeMode: themeMode,
+                home: const HomeView(),
+              )),
     );
   }
 }
