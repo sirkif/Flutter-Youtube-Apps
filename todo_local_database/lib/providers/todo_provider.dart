@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todo_app/constants.dart';
-import 'package:uuid/uuid.dart';
 
 import '../models/todo_model.dart';
 
 class TodoProvider with ChangeNotifier {
+  int todoId = 0;
+
   List<TodoModel> todoList = [];
 
   List<TodoModel> _activeTodos = [];
@@ -25,40 +26,32 @@ class TodoProvider with ChangeNotifier {
         .toList();
   }
 
-  List<TodoModel> get activeTodos {
-    // items.sort((a, b) => a.name.compareTo(b.name)); //ASC
-    // items.sort((b, a) => a.name.compareTo(b.name)); //DESC
-
-    return _activeTodos;
-  }
+  List<TodoModel> get activeTodos => _activeTodos;
 
   List<TodoModel> get completedTodos {
-    final completedList = todoBox.values.toList();
+    final completedItems = todoBox.values.toList();
 
     _completedTodos =
-        completedList.where((todoIten) => todoIten.completed).toList();
+        completedItems.where((todoIten) => todoIten.completed).toList();
     return _completedTodos;
   }
 
   void addNewTodoItem(String value) {
     if (value.isNotEmpty) {
       final newTodo = TodoModel(
-        id: const Uuid().v1(),
+        id: todoId++,
         title: value,
       );
 
-      todoBox.add(newTodo);
+      todoBox.put(newTodo.id, newTodo);
       getTodoList();
 
       notifyListeners();
     }
   }
 
-  void markTodoAsCompleted(String id) {
-    final todoIndex =
-        todoBox.values.toList().indexWhere((todoItem) => todoItem.id == id);
-
-    final activeItem = todoBox.get(todoIndex);
+  void markTodoAsCompleted(int id) {
+    final activeItem = todoBox.get(id);
 
     if (activeItem != null) {
       final updatedItem = activeItem.copyWith(completed: true);
@@ -68,43 +61,42 @@ class TodoProvider with ChangeNotifier {
 
       _activeTodos[activeItemIndex] = updatedItem;
 
-      todoBox.put(todoIndex, updatedItem);
+      todoBox.put(id, updatedItem);
+
       notifyListeners();
 
-      Future.delayed(const Duration(seconds: 2), () {
-        _activeTodos.removeWhere((todoItem) => todoItem.id == activeItem.id);
+      Future.delayed(const Duration(seconds: 1), () {
+        _activeTodos.removeWhere((todoItem) => todoItem.id == id);
         notifyListeners();
       });
     }
   }
 
-  void markTodoAsActive(String id) {
-    // 1- Get CompletedTodo Item
+  void markTodoAsActive(int id) {
     final completedTodoItem =
-        completedTodos.firstWhere((todoItem) => todoItem.id == id);
+        _completedTodos.firstWhere((todoItem) => todoItem.id == id);
 
-    // 2- Create a copy of ActiveTodo Item and update its completed prop to => False
     final updatedItem = completedTodoItem.copyWith(completed: false);
 
-    // 3- Add the modified Todo Item to the ActiveTodos list
-    activeTodos.add(updatedItem);
+    todoBox.put(id, updatedItem);
 
-    // 4- Remove the ActiveTodo Item from CompletedTodos List
-    completedTodos.removeWhere((todo) => todo.id != updatedItem.id);
+    _activeTodos.removeWhere((todoItem) => todoItem.id == id);
+    getTodoList();
 
     notifyListeners();
   }
 
-  void removeActiveTodo(TodoModel todoItem) {
-    _activeTodos.remove(todoItem);
+  void removeActiveTodo(int id) {
+    _activeTodos.removeWhere((todoItem) => todoItem.id == id);
 
-    todoBox.delete(todoItem.id);
+    todoBox.delete(id);
     notifyListeners();
   }
 
-  void removeCompletedTodo(TodoModel todoItem) {
-    todoBox.delete(todoItem.id);
+  void removeCompletedTodo(int id) {
+    _completedTodos.removeWhere((todoItem) => todoItem.id == id);
 
+    todoBox.delete(id);
     notifyListeners();
   }
 
@@ -114,22 +106,3 @@ class TodoProvider with ChangeNotifier {
     super.dispose();
   }
 }
-
-
-
-// void markTodoAsActive(String id) {
-//   final todo = todoBox.values.firstWhere((element) => element.id == id);
-//   todo.completed = false;
-//   todo.save();
-//   notifyListeners();
-// }
-
-// void removeActiveTodo(String id) {
-//   todoBox.delete(id);
-//   notifyListeners();
-// }
-
-// void removeCompletedTodo(String id) {
-//   todoBox.delete(id);
-//   notifyListeners();
-// }

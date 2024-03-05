@@ -29,9 +29,9 @@ class TodoList extends StatelessWidget {
 
   void removeTodo(BuildContext context, TodoModel todoItem) {
     if (todoItem.completed) {
-      context.read<TodoProvider>().removeCompletedTodo(todoItem);
+      context.read<TodoProvider>().removeCompletedTodo(todoItem.id);
     } else {
-      context.read<TodoProvider>().removeActiveTodo(todoItem);
+      context.read<TodoProvider>().removeActiveTodo(todoItem.id);
     }
 
     showSnackBarWidget(context, todoItem);

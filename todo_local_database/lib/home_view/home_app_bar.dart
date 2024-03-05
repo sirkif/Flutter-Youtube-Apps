@@ -31,11 +31,12 @@ class HomeAppBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                "TODO",
+                "ToDoW",
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.w500,
-                  letterSpacing: 8,
+                  letterSpacing: 5,
+                  fontFamily: "Sego",
                   color: Colors.white,
                 ),
               ),

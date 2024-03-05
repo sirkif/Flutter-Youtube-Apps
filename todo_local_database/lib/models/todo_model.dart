@@ -8,7 +8,7 @@ const uiid = Uuid();
 @HiveType(typeId: 1)
 class TodoModel {
   @HiveField(0)
-  String id;
+  int id;
 
   @HiveField(1)
   String title;
@@ -23,7 +23,7 @@ class TodoModel {
   });
 
   TodoModel copyWith({
-    String? id,
+    int? id,
     String? title,
     bool? completed,
   }) {

@@ -58,6 +58,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
 }
 
 flutter {
@@ -65,3 +66,4 @@ flutter {
 }
 
 dependencies {}
+

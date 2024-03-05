@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/constants.dart';
 
-import '../models/todo_model.dart';
 import '../providers/todo_provider.dart';
 import '../utils/service_locator.dart';
 
@@ -22,8 +21,7 @@ class AppFloatingButton extends StatelessWidget {
           ? Colors.black87
           : Colors.indigo,
       onPressed: () async {
-        await Hive.box<TodoModel>(todoBoxModel).deleteFromDisk();
-
+        await Hive.deleteBoxFromDisk(todoBoxModel);
         // todoProvider.addNewTodoItem(textControllerSingleton.text.trim());
         // textControllerSingleton.clear();
         // FocusScope.of(context).unfocus();
