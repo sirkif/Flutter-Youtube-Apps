@@ -17,7 +17,8 @@ class HomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeTodos = context.watch<TodoProvider>().activeTodos;
+    final activeTodos =
+        context.watch<TodoProvider>().activeTodos.reversed.toList();
     final completedTodos = context.watch<TodoProvider>().completedTodos;
 
     return Column(

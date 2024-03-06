@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_app/providers/theme_provider.dart';
+import 'package:todo_app/providers/app_theme_provider.dart';
 
 import '../constants.dart';
 import '../widgets/app_textfield.dart';
@@ -12,7 +12,7 @@ class HomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = context.read<ThemeProvider>();
+    final themeProvider = context.read<AppThemeProvider>();
 
     return Container(
       height: 200,

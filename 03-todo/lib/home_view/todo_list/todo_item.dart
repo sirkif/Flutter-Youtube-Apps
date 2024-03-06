@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/models/todo_model.dart';
 
 class TodoItem extends StatelessWidget {
-  const TodoItem({
+  const TodoItem(
+    this.todoItem,
+    this.markTodoAsCompleted,
+    this.markTodoAsActive, {
     super.key,
-    required this.todoItem,
-    required this.markTodoAsCompleted,
-    required this.markTodoAsActive,
   });
 
   final TodoModel todoItem;
-  final Function(String) markTodoAsCompleted;
-  final Function(String) markTodoAsActive;
+  final Function(int) markTodoAsCompleted;
+  final Function(int) markTodoAsActive;
 
   @override
   Widget build(BuildContext context) {

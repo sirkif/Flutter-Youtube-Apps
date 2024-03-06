@@ -3,12 +3,15 @@ import 'package:flutter/foundation.dart';
 import '../models/todo_model.dart';
 
 class TodoProvider with ChangeNotifier {
+  int todoId = 0;
+
   List<TodoModel> activeTodos = [];
   List<TodoModel> completedTodos = [];
 
   void addNewTodoItem(String value) {
     if (value.isNotEmpty) {
       final newTodo = TodoModel(
+        id: todoId++,
         title: value,
       );
 
@@ -17,43 +20,39 @@ class TodoProvider with ChangeNotifier {
     }
   }
 
-  void markTodoAsCompleted(String id) {
+  void markTodoAsCompleted(int id) {
     // 1- Get index of ActiveTodo Item
-    final activeItemIndex =
-        activeTodos.indexWhere((todoItem) => todoItem.id == id);
+    final activeItemIndex = activeTodos.indexWhere((item) => item.id == id);
 
     // 2- Create a copy of ActiveTodo Item and update its completed prop to => True
-    final updatedItem = activeTodos[activeItemIndex].copyWith(completed: true);
+    activeTodos[activeItemIndex].completed = true;
 
-    // 3- Update the modified Active Todo Item
-    activeTodos[activeItemIndex] = updatedItem;
-
-    // 4- Add the modified Todo Item to the CompletedTodos list
-    completedTodos.add(updatedItem);
+    // 3- Add the modified Todo Item to the CompletedTodos list
+    completedTodos.add(activeTodos[activeItemIndex]);
 
     notifyListeners();
 
-    Future.delayed(const Duration(seconds: 2), () {
-      // 5- Remove the CompletedTodo Item from ActiveTodos List
+    Future.delayed(const Duration(seconds: 1), () {
+      // 4- Remove the CompletedTodo Item from ActiveTodos List
       activeTodos.removeAt(activeItemIndex);
 
       notifyListeners();
     });
   }
 
-  void markTodoAsActive(String id) {
+  void markTodoAsActive(int id) {
     // 1- Get CompletedTodo Item
     final completedTodoItem =
-        completedTodos.firstWhere((todoItem) => todoItem.id == id);
+        completedTodos.firstWhere((item) => item.id == id);
 
-    // 2- Create a copy of ActiveTodo Item and update its completed prop to => False
-    final updatedItem = completedTodoItem.copyWith(completed: false);
+    // 2- Update its completed property to => False
+    completedTodoItem.completed = false;
 
     // 3- Add the modified Todo Item to the ActiveTodos list
-    activeTodos.add(updatedItem);
+    activeTodos.add(completedTodoItem);
 
     // 4- Remove the ActiveTodo Item from CompletedTodos List
-    completedTodos.removeWhere((todo) => todo.id != updatedItem.id);
+    completedTodos.removeWhere((item) => item.id == id);
 
     notifyListeners();
   }

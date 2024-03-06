@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ThemeProvider with ChangeNotifier {
+class AppThemeProvider with ChangeNotifier {
   bool isDarkMode = true;
 
   Future<void> toggleTheme() async {

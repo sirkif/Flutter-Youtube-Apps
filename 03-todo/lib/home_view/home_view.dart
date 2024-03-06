@@ -14,6 +14,8 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  int todoId = 0;
+
   List<TodoModel> activeTodos = [];
   List<TodoModel> completedTodos = [];
 
@@ -23,6 +25,7 @@ class _HomeViewState extends State<HomeView> {
     if (titleValue.isNotEmpty) {
       setState(() {
         final newTodo = TodoModel(
+          id: todoId++,
           title: titleValue,
         );
         activeTodos.add(newTodo);
@@ -33,45 +36,53 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
-  void markTodoAsCompleted(String id) {
+  void markTodoAsCompleted(int id) {
     // 1- Get index of ActiveTodo Item
-    final activeItemIndex =
-        activeTodos.indexWhere((todoItem) => todoItem.id == id);
+    final activeItemIndex = activeTodos.indexWhere((item) => item.id == id);
 
     // 2- Create a copy of ActiveTodo Item and update its completed prop to => True
-    final updatedItem = activeTodos[activeItemIndex].copyWith(completed: true);
+    activeTodos[activeItemIndex].completed = true;
 
     setState(() {
-      // 3- Update the modified Active Todo Item
-      activeTodos[activeItemIndex] = updatedItem;
-
-      // 4- Add the modified Todo Item to the CompletedTodos list
-      completedTodos.add(updatedItem);
+      // 3- Add the modified Todo Item to the CompletedTodos list
+      completedTodos.add(activeTodos[activeItemIndex]);
     });
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       setState(() {
-        // 5- Remove the CompletedTodo Item from ActiveTodos List
+        // 4- Remove the CompletedTodo Item from ActiveTodos List
         activeTodos.removeAt(activeItemIndex);
       });
     });
   }
 
-  void markTodoAsActive(String id) {
+  void markTodoAsActive(int id) {
     // 1- Get CompletedTodo Item
     final completedTodoItem =
-        completedTodos.firstWhere((todoItem) => todoItem.id == id);
+        completedTodos.firstWhere((item) => item.id == id);
 
-    // 2- Create a copy of ActiveTodo Item and update its completed prop to => False
-    final updatedItem = completedTodoItem.copyWith(completed: false);
+    // 2- update completed property to => False
+    completedTodoItem.completed = true;
+
+    // 3- Add the modified Todo Item to the ActiveTodos list
+    activeTodos.add(completedTodoItem);
 
     setState(() {
-      // 3- Add the modified Todo Item to the ActiveTodos list
-      activeTodos.add(updatedItem);
-
       // 4- Remove the ActiveTodo Item from CompletedTodos List
-      completedTodos.removeWhere((todo) => todo.id != updatedItem.id);
+      completedTodos.removeWhere((item) => item.id == id);
     });
+  }
+
+  void removeTodo(TodoModel todoItem) {
+    if (todoItem.completed) {
+      setState(() {
+        completedTodos.removeWhere((item) => item.id == todoItem.id);
+      });
+    } else {
+      setState(() {
+        activeTodos.removeWhere((item) => item.id == todoItem.id);
+      });
+    }
   }
 
   @override
@@ -129,16 +140,18 @@ class _HomeViewState extends State<HomeView> {
                         activeTodos.isEmpty
                             ? const AppEmptyView()
                             : TodoList(
-                                todoList: activeTodos,
-                                markTodoAsCompleted: markTodoAsCompleted,
-                                markTodoAsActive: markTodoAsActive,
+                                activeTodos,
+                                markTodoAsCompleted,
+                                markTodoAsActive,
+                                removeTodo,
                               ),
                         completedTodos.isEmpty
                             ? const AppEmptyView()
                             : TodoList(
-                                todoList: completedTodos,
-                                markTodoAsCompleted: markTodoAsCompleted,
-                                markTodoAsActive: markTodoAsActive,
+                                completedTodos,
+                                markTodoAsCompleted,
+                                markTodoAsActive,
+                                removeTodo,
                               ),
                       ],
                     ),

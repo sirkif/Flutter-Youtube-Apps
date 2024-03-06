@@ -56,8 +56,7 @@ class TodoProvider with ChangeNotifier {
     if (activeItem != null) {
       final updatedItem = activeItem.copyWith(completed: true);
 
-      final activeItemIndex =
-          _activeTodos.indexWhere((todoItem) => todoItem.id == id);
+      final activeItemIndex = _activeTodos.indexWhere((item) => item.id == id);
 
       _activeTodos[activeItemIndex] = updatedItem;
 
@@ -66,7 +65,7 @@ class TodoProvider with ChangeNotifier {
       notifyListeners();
 
       Future.delayed(const Duration(seconds: 1), () {
-        _activeTodos.removeWhere((todoItem) => todoItem.id == id);
+        _activeTodos.removeWhere((item) => item.id == id);
         notifyListeners();
       });
     }
@@ -74,27 +73,27 @@ class TodoProvider with ChangeNotifier {
 
   void markTodoAsActive(int id) {
     final completedTodoItem =
-        _completedTodos.firstWhere((todoItem) => todoItem.id == id);
+        _completedTodos.firstWhere((item) => item.id == id);
 
     final updatedItem = completedTodoItem.copyWith(completed: false);
 
     todoBox.put(id, updatedItem);
 
-    _activeTodos.removeWhere((todoItem) => todoItem.id == id);
+    _activeTodos.removeWhere((item) => item.id == id);
     getTodoList();
 
     notifyListeners();
   }
 
   void removeActiveTodo(int id) {
-    _activeTodos.removeWhere((todoItem) => todoItem.id == id);
+    _activeTodos.removeWhere((item) => item.id == id);
 
     todoBox.delete(id);
     notifyListeners();
   }
 
   void removeCompletedTodo(int id) {
-    _completedTodos.removeWhere((todoItem) => todoItem.id == id);
+    _completedTodos.removeWhere((item) => item.id == id);
 
     todoBox.delete(id);
     notifyListeners();

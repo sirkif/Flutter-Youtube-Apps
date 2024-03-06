@@ -4,23 +4,20 @@ import 'package:todo_app/home_view/todo_list/todo_item.dart';
 
 import '../../models/todo_model.dart';
 
-class TodoList extends StatefulWidget {
-  const TodoList({
+class TodoList extends StatelessWidget {
+  const TodoList(
+    this.todoList,
+    this.markTodoAsCompleted,
+    this.markTodoAsActive,
+    this.removeTodo, {
     super.key,
-    required this.todoList,
-    required this.markTodoAsCompleted,
-    required this.markTodoAsActive,
   });
 
   final List<TodoModel> todoList;
-  final Function(String) markTodoAsCompleted;
-  final Function(String) markTodoAsActive;
+  final Function(int) markTodoAsCompleted;
+  final Function(int) markTodoAsActive;
+  final Function(TodoModel) removeTodo;
 
-  @override
-  State<TodoList> createState() => _TodoListState();
-}
-
-class _TodoListState extends State<TodoList> {
   void showSnackBarWidget(BuildContext context, TodoModel todoItem) {
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -32,13 +29,6 @@ class _TodoListState extends State<TodoList> {
         ),
       ),
     ));
-  }
-
-  void removeTodo(TodoModel todoItem) {
-    setState(() {
-      widget.todoList.remove(todoItem);
-    });
-    showSnackBarWidget(context, todoItem);
   }
 
   AlertDialog buildAlertDialog(BuildContext context) {
@@ -65,9 +55,9 @@ class _TodoListState extends State<TodoList> {
         vertical: kPadding8,
         horizontal: kPadding16,
       ),
-      itemCount: widget.todoList.length,
+      itemCount: todoList.length,
       itemBuilder: (context, index) {
-        final todoItem = widget.todoList[index];
+        final todoItem = todoList[index];
 
         return Dismissible(
           key: ValueKey(todoItem.id),
@@ -85,7 +75,10 @@ class _TodoListState extends State<TodoList> {
             //   ),
             // ),
           ),
-          onDismissed: (direction) => removeTodo(todoItem),
+          onDismissed: (direction) {
+            removeTodo(todoItem);
+            showSnackBarWidget(context, todoItem);
+          },
           confirmDismiss: (DismissDirection direction) async {
             final confirmed = await showDialog<bool>(
               context: context,
@@ -95,9 +88,9 @@ class _TodoListState extends State<TodoList> {
             return confirmed;
           },
           child: TodoItem(
-            todoItem: todoItem,
-            markTodoAsCompleted: widget.markTodoAsCompleted,
-            markTodoAsActive: widget.markTodoAsActive,
+            todoItem,
+            markTodoAsCompleted,
+            markTodoAsActive,
           ),
         );
       },

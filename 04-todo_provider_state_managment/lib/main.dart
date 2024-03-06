@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_app/providers/theme_provider.dart';
+import 'package:todo_app/providers/app_theme_provider.dart';
 import 'package:todo_app/providers/todo_provider.dart';
 
 import 'color_schemes.dart';
@@ -18,7 +18,7 @@ void main() {
           create: (context) => TodoProvider(),
         ),
         ChangeNotifierProvider(
-          create: (context) => ThemeProvider(),
+          create: (context) => AppThemeProvider(),
         ),
       ],
       child: const MyApp(),
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    final themeProvider = context.watch<ThemeProvider>();
+    final themeProvider = context.watch<AppThemeProvider>();
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
