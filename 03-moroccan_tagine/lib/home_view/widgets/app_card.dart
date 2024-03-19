@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moroccan_tagine/constants.dart';
 import 'package:moroccan_tagine/home_view/models/ingredients_model.dart';
 
 class AppCard extends StatelessWidget {
@@ -14,7 +15,7 @@ class AppCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.only(bottom: 16),
       decoration: const BoxDecoration(
-          color: Color(0xffFBDDAA),
+          color: kCardBackgroundColor,
           borderRadius: BorderRadius.all(
             Radius.circular(8),
           ),
@@ -41,21 +42,21 @@ class AppCard extends StatelessWidget {
               Text(
                 "${ingredient.weight}kg",
                 style: const TextStyle(
-                  color: Color(0xff343434),
+                  color: kTextSecondaryColor,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               Text(
                 " - ${ingredient.name} - ",
                 style: const TextStyle(
-                  color: Color(0xff343434),
+                  color: kTextSecondaryColor,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               Text(
                 "0${ingredient.id}",
                 style: const TextStyle(
-                  color: Color(0xff343434),
+                  color: kTextSecondaryColor,
                   fontWeight: FontWeight.w600,
                 ),
               ),

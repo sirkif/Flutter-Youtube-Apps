@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:moroccan_tagine/constants.dart';
 import 'package:moroccan_tagine/home_view/models/ingredients_model.dart';
 import 'package:moroccan_tagine/home_view/widgets/app_button.dart';
 
@@ -45,7 +46,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF5E5D8),
+      backgroundColor: kScafoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -56,7 +57,7 @@ class _HomeViewState extends State<HomeView> {
                 "Moroccan Tagine",
                 style: GoogleFonts.reggaeOne(
                   textStyle: const TextStyle(
-                    color: Color(0xffA14A2C),
+                    color: kTextPrimaryColor,
                     fontSize: 32,
                   ),
                 ),
@@ -114,9 +115,10 @@ class _HomeViewState extends State<HomeView> {
               Text(
                 "${totalPrice.toStringAsFixed(2)} Dhs",
                 style: const TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xff343434)),
+                  fontSize: 32,
+                  fontWeight: FontWeight.w600,
+                  color: kTextSecondaryColor,
+                ),
               ),
               const SizedBox(
                 height: 32,
